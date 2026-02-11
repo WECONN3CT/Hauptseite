@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WECONN3CT.App | Softwareentwicklung</title>
+    <meta name="description" content="WECONN3CT.App entwickelt Apps, Websites und Software – schnell, KI-gestützt und Made in Germany. Team in Bad Honnef, 15 Mitarbeiter, 12 Projekte.">
+
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            DEFAULT: '#2E3EE8',
+                            50: '#F0F4FF',
+                            100: '#E8EBFF',
+                            200: '#C7CFFF',
+                            300: '#A6B3FF',
+                            400: '#6A7CFF',
+                            500: '#2E3EE8',
+                            600: '#2835CF',
+                            700: '#1B2470',
+                            800: '#141B54',
+                            900: '#0D1238',
+                            950: '#060918',
+                        },
+                        accent: {
+                            DEFAULT: '#9D4EDD',
+                            50: '#F8F0FF',
+                            100: '#F0E0FF',
+                            200: '#E0C0FF',
+                            300: '#C990FF',
+                            400: '#B060FF',
+                            500: '#9D4EDD',
+                            600: '#7B3DB0',
+                            700: '#5A2D82',
+                            800: '#3A1D55',
+                            900: '#1A0D27',
+                        }
+                    },
+                    animation: {
+                        'blob': 'blob 7s infinite',
+                        'shimmer': 'shimmer 1.5s infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 60s linear infinite',
+                        'spin-slow-reverse': 'spin 40s linear infinite reverse',
+                        'spin-border': 'spin 3s linear infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        shimmer: {
+                            '0%': { transform: 'translateX(-100%)' },
+                            '100%': { transform: 'translateX(100%)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        /* Glass Social Media Icons */
+        .social-icon-glass {
+            position: relative;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .social-icon-glass::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 12px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .social-icon-glass:hover::before {
+            opacity: 1;
+        }
+
+        /* LinkedIn Hover Effect */
+        .social-icon-glass:not(.social-icon-instagram):hover {
+            background: rgba(0, 119, 181, 0.2);
+            border-color: rgba(0, 119, 181, 0.4);
+            color: #0077B5;
+            box-shadow: 0 0 20px rgba(0, 119, 181, 0.3),
+                        0 0 40px rgba(0, 119, 181, 0.2),
+                        inset 0 0 20px rgba(0, 119, 181, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Instagram Hover Effect */
+        .social-icon-instagram:hover {
+            background: linear-gradient(135deg,
+                rgba(228, 64, 95, 0.2),
+                rgba(249, 119, 50, 0.2),
+                rgba(252, 175, 69, 0.2));
+            border-color: rgba(228, 64, 95, 0.4);
+            color: #E4405F;
+            box-shadow: 0 0 20px rgba(228, 64, 95, 0.3),
+                        0 0 40px rgba(249, 119, 50, 0.2),
+                        inset 0 0 20px rgba(228, 64, 95, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .social-icon-glass svg {
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+
+        .social-icon-glass:hover svg {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-900 antialiased selection:bg-primary-500 selection:text-white overflow-x-hidden font-sans">
+
+    <!-- SVG Gooey Filter für flüssigen Blob-Effekt -->
+    <svg style="position:absolute;width:0;height:0">
+        <defs>
+            <filter id="gooey-filter">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" result="gooey" />
+                <feComposite in="SourceGraphic" in2="gooey" operator="atop" />
+            </filter>
+        </defs>
+    </svg>
+
+    <!-- NAVIGATION - WECONN3CT Glass Style -->
+    <div class="navbar-wrapper">
+    <nav id="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-logo"><img src="images/logo.png" alt="WECONN3CT.App" class="navbar-logo-img"></a>
+
+            <ul class="navbar-menu" id="navbarMenu">
+                <li><a href="index.html" class="navbar-link">Home</a></li>
+                <li><a href="services.html" class="navbar-link">Services</a></li>
+                <li><a href="success-stories.html" class="navbar-link">Projekte</a></li>
+                <li><a href="about.html" class="navbar-link">Über uns</a></li>
+                <li><a href="contact.html" class="navbar-link">Kontakt</a></li>
+                <li class="navbar-cta"><a href="contact.html" class="navbar-link">Termin buchen</a></li>
+            </ul>
+
+            <div class="navbar-right">
+                <a href="contact.html" class="navbar-cta-right">Termin buchen</a>
+
+                <!-- Dark Mode Toggle - iPhone Style -->
+                <label class="theme-switch" aria-label="Theme wechseln">
+                    <input type="checkbox" id="themeToggle">
+                    <span class="theme-slider">
+                        <span class="theme-slider-icon theme-slider-icon--sun">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="5"/>
+                                <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                            </svg>
+                        </span>
+                        <span class="theme-slider-icon theme-slider-icon--moon">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                            </svg>
+                        </span>
+                    </span>
+                </label>
+            </div>
+
+            <button class="navbar-toggle" id="navbarToggle">
+                <span class="navbar-toggle-icon"></span>
+            </button>
+        </div>
+    </nav>
+    </div>
+
+    <!-- Mobile Menu (Fallback) -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-lg border-t border-gray-200 fixed top-20 left-0 right-0 z-40">
+        <div class="px-4 py-6 space-y-4">
+            <a href="index.html" class="block text-gray-700 hover:text-primary-600 transition-colors font-medium">Home</a>
+            <a href="services.html" class="block text-gray-700 hover:text-primary-600 transition-colors font-medium">Services</a>
+            <a href="success-stories.html" class="block text-gray-700 hover:text-primary-600 transition-colors font-medium">Projekte</a>
+            <a href="about.html" class="block text-gray-700 hover:text-primary-600 transition-colors font-medium">Über uns</a>
+            <a href="contact.html" class="block text-gray-700 hover:text-primary-600 transition-colors font-medium">Kontakt</a>
+            <a href="contact.html" class="block w-full text-center px-6 py-3 bg-gradient-to-r from-primary-500 to-accent-500 text-white rounded-lg font-semibold hover:from-primary-600 hover:to-accent-600 transition-all shadow-lg">
+                Termin buchen
+            </a>
+        </div>
+    </div>
+
+    <!-- Wrapper für Sticky-Effekt -->
+    <div class="hero-scroll-wrapper">
+    <!-- Hero Section - Bleibt fixiert beim Scrollen -->
+    <section id="hero-section" class="relative pt-24 pb-20 lg:pt-28 lg:pb-24 overflow-hidden min-h-[100vh] flex flex-col">
+        <!-- Particle Effect Background -->
+        <div id="canvas-container"></div>
+
+        <!-- Gradient Blobs -->
+        <div class="hero-gradient-blue"></div>
+        <div class="hero-gradient-purple"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10 flex-1">
+            <div class="max-w-2xl">
+                <!-- Text Content -->
+                <div class="animate-on-scroll" data-animation="slide-up">
+                    <!-- Badge - Glass Pill -->
+                    <div class="hero-badge inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
+                        </span>
+                        <span class="text-gray-800 text-xs font-bold uppercase tracking-widest">Software made in Germany</span>
+                    </div>
+
+                    <!-- Wir sind -->
+                    <p class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Wir sind</p>
+
+                    <!-- Main Title -->
+                    <h1 class="text-5xl lg:text-7xl font-extrabold text-gray-900 tracking-tight leading-[1.1] mb-8">
+                        <span class="hero-glass-text">Wir verwandeln</span> <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-primary-500 to-blue-600 animate-pulse-slow">Ideen</span><br>
+                        <span class="hero-glass-text">in</span> <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary-500 via-accent-500 to-primary-700 animate-pulse-slow">digitale Erlebnisse.</span>
+                    </h1>
+
+                    <!-- Subtitle -->
+                    <p class="text-lg text-gray-600 mb-10 max-w-lg leading-relaxed">
+                        Professionelle App- und Webentwicklung für Startups, KMU und Creator. Schnell, transparent und 100% Made in Germany.
+                    </p>
+
+                    <!-- CTA Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-5">
+                        <a href="#contact" class="btn-primary group">
+                            <span class="btn-primary-bg"></span>
+                            <span class="btn-primary-content">
+                                Kostenloses Erstgespräch
+                                <svg class="h-5 w-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                </svg>
+                            </span>
+                        </a>
+                        <a href="#services" class="btn-secondary group">
+                            <span class="btn-secondary-content">Unsere Services</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- GitHub-Style Glowing Container Section -->
+    <section class="relative py-0 overflow-visible" id="github-glow-section">
+        <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Der große leuchtende Container -->
+            <div class="github-glow-container" id="github-glow-container">
+                <!-- Inner Content -->
+                <div class="github-glow-inner">
+                    <!-- Browser Mockup -->
+                    <div class="browser-mockup">
+                        <div class="browser-mockup-header">
+                            <div class="browser-dots">
+                                <span class="browser-dot browser-dot--red"></span>
+                                <span class="browser-dot browser-dot--yellow"></span>
+                                <span class="browser-dot browser-dot--green"></span>
+                            </div>
+                            <div class="browser-address-bar">
+                                <a href="https://schornsteinfeger-mertes.de/" target="_blank" rel="noopener" class="browser-url" id="mockup-url" style="text-decoration:none;cursor:pointer;">schornsteinfeger-mertes.de</a>
+                            </div>
+                        </div>
+                        <div class="browser-mockup-body">
+                            <!-- Websites Carousel -->
+                            <div class="mockup-carousel mockup-tab-content" data-tab="websites">
+                                <div class="mockup-carousel-track">
+                                    <div class="mockup-carousel-slide active" data-url="schornsteinfeger-mertes.de" data-href="https://schornsteinfeger-mertes.de/">
+                                        <a href="https://schornsteinfeger-mertes.de/" target="_blank" rel="noopener"><img src="images/webseiten/mertes.png" alt="Schornsteinfeger Mertes Website" style="cursor:pointer;"></a>
+                                    </div>
+                                    <div class="mockup-carousel-slide" data-url="perso-pro.de" data-href="https://www.perso-pro.de/">
+                                        <a href="https://www.perso-pro.de/" target="_blank" rel="noopener"><img src="images/webseiten/persopro.png" alt="PersoPro Website" style="cursor:pointer;"></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Apps Bild -->
+                            <div class="mockup-tab-content" data-tab="apps" style="opacity:0;width:100%;height:70%;display:flex;align-items:stretch;background:#000000;">
+                                <!-- Code Editor Links -->
+                                <div class="code-editor-panel">
+                                    <div class="code-editor-header">
+                                        <span class="code-editor-filename">ChallengeApp.swift</span>
+                                    </div>
+                                    <div class="code-editor-body">
+                                        <pre class="code-typing" id="flutter-code"></pre>
+                                    </div>
+                                </div>
+                                <!-- App Preview Rechts -->
+                                <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:0;">
+                                    <img src="images/apps/apps.png" alt="Apps" style="max-height:150%;max-width:150%;object-fit:contain;margin-top:10px;margin-left:-150px;filter:drop-shadow(0 0 30px rgba(138, 100, 255, 0.5)) drop-shadow(0 0 60px rgba(138, 100, 255, 0.3));">
+                                </div>
+                            </div>
+                            <!-- Software Bild -->
+                            <div class="mockup-tab-content" data-tab="software" style="opacity:0;width:100%;height:100%;display:flex;align-items:flex-start;justify-content:center;padding-top:0;background:#f5f5f5;">
+                                <img src="images/software/ordable.png" alt="Ordable" style="position:absolute;top:-10px;left:-40px;width:300px;height:auto;">
+                                <div style="position:relative;max-width:90%;max-height:90%;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-top:70px;">
+                                    <h3 style="color:#1a1a1a;font-size:38px;font-weight:700;position:absolute;top:-40px;left:50%;transform:translateX(-50%);z-index:1;white-space:nowrap;">Restaurant Management Software</h3>
+                                    <p style="color:#555;font-size:16px;font-weight:400;position:absolute;top:40px;left:50%;transform:translateX(-50%);z-index:1;text-align:center;max-width:600px;line-height:1.5;">Ordable ist eine All-in-One Softwarelösung für Gastronomen, die den Aufbau einer eigenen digitalen Bestellplattform mit Webseite, App und Bestellterminal ermöglicht – komplett unter eigener Marke.</p>
+                                    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:100%;height:100%;background:radial-gradient(ellipse at center, rgba(255,150,0,0.8) 0%, rgba(255,200,0,0.5) 40%, transparent 70%);filter:blur(60px);pointer-events:none;"></div>
+                                    <img src="images/software/software 1.png" alt="Software" style="max-width:100%;max-height:100%;object-fit:contain;position:relative;z-index:1;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Navigation - unterhalb des Leuchtcontainers, im Vordergrund -->
+        <div class="flex flex-col items-center -mt-32 relative z-30">
+            <div class="github-tabs-container" style="width: 100%; max-width: 700px;">
+                <div class="github-tabs" style="justify-content: center;">
+                    <button class="github-tab active" data-tab="websites">Websites</button>
+                    <button class="github-tab" data-tab="apps">Apps</button>
+                    <button class="github-tab" data-tab="software">Software</button>
+                    <button class="github-tab" data-tab="ki">KI-Automation</button>
+                    <button class="github-tab" data-tab="branding">Branding</button>
+                </div>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="github-tab-content" style="text-align: center; margin-top: 16px;">
+                <p class="github-tab-description" id="tab-description">
+                    Native iOS & Android Apps sowie Cross-Platform-Entwicklung mit Flutter und React Native. Vom Konzept bis zum App Store.
+                </p>
+            </div>
+        </div>
+
+        <!-- Logo Bar - außerhalb des Containers, im Vordergrund -->
+        <div class="references-bar mt-16 relative z-30">
+            <div class="references-bar-content">
+                <div class="references-logos logo-scroll">
+                    <img src="images/logos/7.png" alt="Logo" class="reference-logo-img" style="height:125px;margin:-37px 0 -43px 0;">
+                    <img src="images/logos/8.png" alt="Logo" class="reference-logo-img" style="height:80px;margin:-18px 0;">
+                    <img src="images/logos/9.png" alt="Logo" class="reference-logo-img" style="height:56px;">
+                    <img src="images/logos/10.png" alt="Logo" class="reference-logo-img" style="height:110px;margin:-33px 0;">
+                    <img src="images/logos/11.png" alt="Logo" class="reference-logo-img" style="height:58px;">
+                    <img src="images/logos/12.png" alt="Logo" class="reference-logo-img" style="height:105px;margin:-30px 0;">
+                    <img src="images/logos/13.png" alt="Logo" class="reference-logo-img" style="height:80px;margin:-18px 0;">
+                    <!-- Duplikat für seamless loop -->
+                    <img src="images/logos/7.png" alt="Logo" class="reference-logo-img" style="height:125px;margin:-37px 0 -43px 0;">
+                    <img src="images/logos/8.png" alt="Logo" class="reference-logo-img" style="height:80px;margin:-18px 0;">
+                    <img src="images/logos/9.png" alt="Logo" class="reference-logo-img" style="height:56px;">
+                    <img src="images/logos/10.png" alt="Logo" class="reference-logo-img" style="height:110px;margin:-33px 0;">
+                    <img src="images/logos/11.png" alt="Logo" class="reference-logo-img" style="height:58px;">
+                    <img src="images/logos/12.png" alt="Logo" class="reference-logo-img" style="height:105px;margin:-30px 0;">
+                    <img src="images/logos/13.png" alt="Logo" class="reference-logo-img" style="height:80px;margin:-18px 0;">
+                </div>
+            </div>
+        </div>
+    </section>
+    </div><!-- Ende hero-scroll-wrapper -->
+
+    <!-- Mission Section - Bento Grid mit Glassmorphism -->
+    <section id="about" class="py-32 bg-gradient-to-br from-slate-50 via-purple-50/30 to-blue-50/30 relative overflow-x-hidden">
+        <!-- Animated Gradient Orbs -->
+        <div class="absolute top-20 left-10 w-[500px] h-[500px] bg-gradient-to-r from-purple-400/20 to-pink-400/20 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-20 right-10 w-[400px] h-[400px] bg-gradient-to-r from-blue-400/20 to-cyan-400/20 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-violet-400/10 to-fuchsia-400/10 rounded-full blur-3xl"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <!-- Header -->
+            <div class="text-center max-w-4xl mx-auto animate-on-scroll mb-16" data-animation="slide-up">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 backdrop-blur-sm border border-white/40 text-primary-600 text-xs font-bold uppercase tracking-widest mb-8 shadow-lg shadow-purple-500/5">
+                    <span class="w-2 h-2 bg-gradient-to-r from-primary-500 to-accent-500 rounded-full animate-pulse"></span>
+                    Unsere Vision
+                </div>
+                <h2 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+                    Digitale Innovation<br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary-500 via-purple-500 to-accent-500">für jeden erreichbar</span>
+                </h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Wir demokratisieren Technologie und machen komplexe Lösungen zugänglich.
+                </p>
+            </div>
+
+            <!-- Bento Grid -->
+            <div class="bento-grid">
+                <!-- Große Karte Links -->
+                <div class="bento-card bento-large animate-on-scroll" data-animation="slide-up" data-delay="100">
+                    <div class="bento-card-inner">
+                        <div class="bento-icon bento-icon-purple">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">KI-First Workflows</h3>
+                        <p class="text-gray-600 leading-relaxed text-lg">
+                            Modernste AI-Technologien für maximale Effizienz in jedem Projekt. Wir integrieren künstliche Intelligenz nahtlos in jeden Arbeitsschritt.
+                        </p>
+                        <div class="mt-6 flex items-center gap-3">
+                            <div class="flex -space-x-2">
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white text-xs font-bold">AI</div>
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center text-white text-xs font-bold">ML</div>
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 flex items-center justify-center text-white text-xs font-bold">LLM</div>
+                            </div>
+                            <span class="text-sm text-gray-500">Neueste Technologien</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kleine Karte Oben Rechts -->
+                <div class="bento-card bento-small animate-on-scroll" data-animation="slide-up" data-delay="200">
+                    <div class="bento-card-inner">
+                        <div class="bento-icon bento-icon-blue">
+                            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Made in Germany</h3>
+                        <p class="text-gray-600 leading-relaxed">
+                            DSGVO-konform, Premium Engineering aus Bad Honnef.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Kleine Karte Unten Rechts -->
+                <div class="bento-card bento-small animate-on-scroll" data-animation="slide-up" data-delay="300">
+                    <div class="bento-card-inner">
+                        <div class="bento-icon bento-icon-gradient">
+                            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Schneller Launch</h3>
+                        <p class="text-gray-600 leading-relaxed">
+                            MVPs in Rekordzeit – KI-gestützte Pipelines liefern.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Breite Karte Unten -->
+                <div class="bento-card bento-wide animate-on-scroll" data-animation="slide-up" data-delay="400">
+                    <div class="bento-card-inner bento-card-horizontal">
+                        <div class="bento-icon bento-icon-pink">
+                            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">Partnerschaftliche Zusammenarbeit</h3>
+                            <p class="text-gray-600 leading-relaxed">
+                                Wir arbeiten eng mit unseren Kunden zusammen – transparent, agil und zielorientiert.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-32 bg-white relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-16 animate-on-scroll" data-animation="slide-up">
+                <div class="max-w-2xl">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-500/10 text-primary-600 text-xs font-bold uppercase tracking-widest mb-6">
+                        Was wir machen
+                    </div>
+                    <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                        Unsere Services
+                    </h2>
+                    <p class="text-xl text-gray-600">Skalierbare Lösungen für nachhaltiges Wachstum.</p>
+                </div>
+                <a href="#contact" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gray-900 text-white hover:bg-gray-800 transition-all font-semibold shrink-0">
+                    Projekt starten
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                    </svg>
+                </a>
+            </div>
+
+            <!-- Bento Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Software & App Entwicklung - Featured -->
+                <div class="lg:col-span-2 animate-on-scroll" data-animation="slide-up" data-delay="100">
+                    <div class="group relative h-full bg-gradient-to-br from-primary-500 to-primary-700 rounded-3xl p-8 lg:p-10 overflow-hidden">
+                        <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
+                        <div class="absolute bottom-0 left-0 w-48 h-48 bg-accent-500/20 rounded-full blur-3xl -ml-24 -mb-24"></div>
+                        <div class="relative z-10 h-full flex flex-col">
+                            <div class="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6">
+                                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-2xl lg:text-3xl font-bold text-white mb-4">Software & App Entwicklung</h3>
+                            <p class="text-white/80 leading-relaxed mb-8 max-w-lg">
+                                Business-Apps, Lifestyle-Anwendungen oder kreative Spiele – Wir bringen deine Ideen in den App-Store. Native iOS & Android oder Cross-Platform.
+                            </p>
+                            <div class="mt-auto flex flex-wrap gap-3">
+                                <span class="px-3 py-1 rounded-full bg-white/20 text-white text-xs font-medium">iOS</span>
+                                <span class="px-3 py-1 rounded-full bg-white/20 text-white text-xs font-medium">Android</span>
+                                <span class="px-3 py-1 rounded-full bg-white/20 text-white text-xs font-medium">Flutter</span>
+                                <span class="px-3 py-1 rounded-full bg-white/20 text-white text-xs font-medium">React Native</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Website-Entwicklung -->
+                <div class="animate-on-scroll" data-animation="slide-up" data-delay="200">
+                    <div class="group relative h-full bg-gray-50 hover:bg-gray-100 rounded-3xl p-8 transition-all duration-300 border border-gray-100">
+                        <div class="w-12 h-12 bg-accent-500 rounded-xl flex items-center justify-center mb-6 shadow-lg shadow-accent-500/25">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">Website-Entwicklung</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed mb-6">
+                            Moderne, responsive Websites mit perfekter Performance und SEO.
+                        </p>
+                        <a href="#contact" class="inline-flex items-center text-accent-500 text-sm font-semibold group-hover:text-accent-600 transition-colors">
+                            Mehr erfahren
+                            <svg class="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- KI & Automatisierung -->
+                <div class="animate-on-scroll" data-animation="slide-up" data-delay="300">
+                    <div class="group relative h-full bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl p-8 transition-all duration-300 overflow-hidden">
+                        <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 viewBox=%220 0 60 60%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22none%22 fill-rule=%22evenodd%22%3E%3Cg fill=%22%239C92AC%22 fill-opacity=%220.05%22%3E%3Cpath d=%22M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50"></div>
+                        <div class="relative z-10">
+                            <div class="w-12 h-12 bg-gradient-to-br from-primary-500 to-accent-500 rounded-xl flex items-center justify-center mb-6 shadow-lg">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-3">KI & Automatisierung</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed mb-4">
+                                Automatisiere repetitive Aufgaben mit AI. ChatGPT, Claude & Custom Models.
+                            </p>
+                            <div class="flex flex-wrap gap-2 mb-5">
+                                <span class="px-3 py-1 rounded-full bg-white/10 text-white text-xs font-medium">OpenAI</span>
+                                <span class="px-3 py-1 rounded-full bg-white/10 text-white text-xs font-medium">Claude</span>
+                                <span class="px-3 py-1 rounded-full bg-white/10 text-white text-xs font-medium">Gemini</span>
+                                <span class="px-3 py-1 rounded-full bg-white/10 text-white text-xs font-medium">Python</span>
+                            </div>
+                            <a href="#contact" class="inline-flex items-center text-white text-sm font-semibold group-hover:text-primary-400 transition-colors">
+                                Mehr erfahren
+                                <svg class="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Branding & Online Auftritt - Featured -->
+                <div class="lg:col-span-2 animate-on-scroll" data-animation="slide-up" data-delay="400">
+                    <div class="group relative h-full bg-gradient-to-br from-accent-500 to-primary-600 rounded-3xl p-8 lg:p-10 overflow-hidden">
+                        <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
+                        <div class="absolute bottom-0 left-0 w-48 h-48 bg-primary-400/20 rounded-full blur-3xl -ml-24 -mb-24"></div>
+                        <div class="relative z-10 flex flex-col lg:flex-row lg:items-center gap-8">
+                            <div class="flex-1">
+                                <div class="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 shadow-lg">
+                                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-2xl lg:text-3xl font-bold text-white mb-4">Branding & Online Auftritt</h3>
+                                <p class="text-white/80 leading-relaxed max-w-lg">
+                                    Einprägsame Markenidentität und professionelle Webpräsenz. Von Logo-Design über Corporate Identity bis zur vollständigen Website.
+                                </p>
+                            </div>
+                            <div class="flex flex-wrap gap-3 lg:flex-col">
+                                <span class="px-4 py-2 rounded-full bg-white/10 text-white text-sm font-medium">Logo Design</span>
+                                <span class="px-4 py-2 rounded-full bg-white/10 text-white text-sm font-medium">Webdesign</span>
+                                <span class="px-4 py-2 rounded-full bg-white/10 text-white text-sm font-medium">Corporate Identity</span>
+                                <span class="px-4 py-2 rounded-full bg-white/10 text-white text-sm font-medium">Video</span>
+                                <span class="px-4 py-2 rounded-full bg-white/10 text-white text-sm font-medium">Foto</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Case Studies Section -->
+    <section id="cases" class="py-32 bg-gray-50 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-16 animate-on-scroll" data-animation="slide-up">
+                <div>
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent-500/10 text-accent-600 text-xs font-bold uppercase tracking-widest mb-6">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                        </svg>
+                        Erfolgsgeschichten
+                    </div>
+                    <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                        Projekte, die<br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-accent-500">Ergebnisse liefern</span>
+                    </h2>
+                </div>
+                <a href="#" class="inline-flex items-center gap-2 text-gray-900 font-semibold hover:text-primary-500 transition-colors group">
+                    Alle Projekte
+                    <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                    </svg>
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Case 1 -->
+                <div class="animate-on-scroll" data-animation="slide-up" data-delay="100">
+                    <a href="#" class="block h-full group">
+                        <div class="relative h-[400px] rounded-3xl overflow-hidden">
+                            <img src="images/apps/app.png"
+                                 alt="Betriebs-App"
+                                 class="w-full h-full object-cover scale-125 group-hover:scale-[1.35] transition-transform duration-700" style="object-position: 35% center;">
+                            <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent"></div>
+                            <div class="absolute inset-x-0 bottom-0 p-8">
+                                <div class="flex items-center gap-2 mb-4">
+                                    <span class="px-3 py-1 rounded-full bg-primary-500 text-white text-xs font-bold">App</span>
+                                    <span class="px-3 py-1 rounded-full bg-white/20 text-white text-xs font-medium">Management</span>
+                                </div>
+                                <h3 class="text-2xl font-bold text-white mb-2">Betriebs-App</h3>
+                                <p class="text-gray-300 text-sm mb-4">Kunden, Termine & Aufträge digital verwalten</p>
+                                <div class="flex items-center gap-4">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center">
+                                            <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                        </div>
+                                        <span class="text-white font-bold">8 Wochen bis Go-Live</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Case 2 -->
+                <div class="animate-on-scroll" data-animation="slide-up" data-delay="200">
+                    <a href="#" class="block h-full group">
+                        <div class="relative h-[400px] rounded-3xl overflow-hidden">
+                            <video src="videos/webseite.mp4?v=3"
+                                 autoplay muted loop playsinline
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" style="object-position: center 15%;"></video>
+                            <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent"></div>
+                            <div class="absolute inset-x-0 bottom-0 p-8">
+                                <div class="flex items-center gap-2 mb-4">
+                                    <span class="px-3 py-1 rounded-full bg-accent-500 text-white text-xs font-bold">Web</span>
+                                    <span class="px-3 py-1 rounded-full bg-white/20 text-white text-xs font-medium">B2B</span>
+                                </div>
+                                <h3 class="text-2xl font-bold text-white mb-2">Enterprise Website</h3>
+                                <p class="text-gray-300 text-sm mb-4">Professionelle Web-Präsenz für etablierte Marken</p>
+                                <div class="flex items-center gap-4">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center">
+                                            <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                            </svg>
+                                        </div>
+                                        <span class="text-white font-bold">+200% Kunden</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Case 3 -->
+                <div class="animate-on-scroll" data-animation="slide-up" data-delay="300">
+                    <a href="#" class="block h-full group">
+                        <div class="relative h-[400px] rounded-3xl overflow-hidden">
+                            <img src="images/brand/branddesign.png"
+                                 alt="Full Brand Design"
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent"></div>
+                            <div class="absolute inset-x-0 bottom-0 p-8">
+                                <div class="flex items-center gap-2 mb-4">
+                                    <span class="px-3 py-1 rounded-full bg-pink-500 text-white text-xs font-bold">Branding</span>
+                                    <span class="px-3 py-1 rounded-full bg-white/20 text-white text-xs font-medium">Design</span>
+                                </div>
+                                <h3 class="text-2xl font-bold text-white mb-2">Full Brand Design</h3>
+                                <p class="text-gray-300 text-sm mb-4">Logo, Webseite, Visitenkarten, Fotos & Videos – perfekt harmoniert für einen einheitlichen Markenauftritt.</p>
+                                <div class="flex items-center gap-4">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-8 h-8 rounded-full bg-yellow-500/20 flex items-center justify-center">
+                                            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                                            </svg>
+                                        </div>
+                                        <span class="text-white font-bold">5 Sterne Marktauftritt</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="contact" class="py-32 relative overflow-hidden">
+        <!-- Background -->
+        <div class="absolute inset-0 bg-gradient-to-br from-gray-900 via-primary-900 to-gray-900"></div>
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 viewBox=%220 0 60 60%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22none%22 fill-rule=%22evenodd%22%3E%3Cg fill=%22%239C92AC%22 fill-opacity=%220.03%22%3E%3Cpath d=%22M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
+
+        <!-- Gradient Orbs -->
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-primary-500/20 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-accent-500/20 rounded-full blur-3xl"></div>
+
+        <div class="relative z-10 max-w-5xl mx-auto px-4">
+            <div class="text-center animate-on-scroll" data-animation="slide-up">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/10 text-primary-300 text-xs font-bold uppercase tracking-widest mb-8">
+                    <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                    Jetzt starten
+                </div>
+
+                <h2 class="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-8 leading-tight">
+                    Bereit für dein<br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 via-accent-400 to-primary-400">nächstes Projekt?</span>
+                </h2>
+
+                <p class="text-xl text-gray-300 mb-12 max-w-2xl mx-auto leading-relaxed">
+                    Du hast eine Idee, die du schon lange umsetzen willst? Buche dir ganz einfach einen Termin – kostenlos, unverbindlich und ohne Verpflichtungen.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <a href="mailto:info@weconn3ct.app" class="group inline-flex items-center gap-3 bg-white text-gray-900 font-bold px-8 py-5 rounded-2xl hover:bg-gray-100 transition-all shadow-2xl shadow-black/20 hover:shadow-white/10 hover:scale-105">
+                        <span>Kostenloses Erstgespräch</span>
+                        <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                        </svg>
+                    </a>
+                    <span class="text-gray-500">oder</span>
+                    <a href="mailto:info@weconn3ct.app" class="text-white font-semibold hover:text-primary-300 transition-colors underline underline-offset-4">
+                        info@weconn3ct.app
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-950 pt-20 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Main Footer -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 pb-16 border-b border-gray-800">
+                <!-- Brand -->
+                <div class="lg:col-span-2">
+                    <a href="index.html" class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-br from-primary-500 to-accent-500 rounded-xl flex items-center justify-center shadow-lg shadow-primary-500/25">
+                            <span class="text-white font-bold text-2xl">W</span>
+                        </div>
+                        <div>
+                            <span class="text-white font-bold text-xl tracking-tight block">WECONN3CT</span>
+                            <span class="text-gray-500 text-xs">Software made in Germany</span>
+                        </div>
+                    </a>
+                    <p class="text-gray-400 leading-relaxed max-w-md mb-8">
+                        Wir entwickeln Apps, Websites und Software – schnell, KI-gestützt und mit höchsten Qualitätsstandards. Unser Team in Bad Honnef freut sich auf dein Projekt.
+                    </p>
+                    <div class="flex gap-3">
+                        <!-- LinkedIn -->
+                        <a href="#" class="social-icon-glass group">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                        </a>
+                        <!-- Instagram -->
+                        <a href="#" class="social-icon-glass social-icon-instagram group">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-white font-bold mb-6 text-sm">Navigation</h4>
+                    <ul class="space-y-4">
+                        <li><a href="about.html" class="text-gray-400 hover:text-white transition-colors text-sm flex items-center gap-2 group"><span class="w-1 h-1 bg-gray-600 rounded-full group-hover:bg-primary-500 transition-colors"></span>Über uns</a></li>
+                        <li><a href="services.html" class="text-gray-400 hover:text-white transition-colors text-sm flex items-center gap-2 group"><span class="w-1 h-1 bg-gray-600 rounded-full group-hover:bg-primary-500 transition-colors"></span>Services</a></li>
+                        <li><a href="success-stories.html" class="text-gray-400 hover:text-white transition-colors text-sm flex items-center gap-2 group"><span class="w-1 h-1 bg-gray-600 rounded-full group-hover:bg-primary-500 transition-colors"></span>Projekte</a></li>
+                        <li><a href="contact.html" class="text-gray-400 hover:text-white transition-colors text-sm flex items-center gap-2 group"><span class="w-1 h-1 bg-gray-600 rounded-full group-hover:bg-primary-500 transition-colors"></span>Kontakt</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div>
+                    <h4 class="text-white font-bold mb-6 text-sm">Kontakt</h4>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-gray-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            <span class="text-gray-400 text-sm">Bad Honnef<br>Deutschland</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <svg class="w-5 h-5 text-gray-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                            <a href="mailto:info@weconn3ct.app" class="text-gray-400 hover:text-primary-400 transition-colors text-sm">info@weconn3ct.app</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-500 text-sm">
+                    &copy; 2025 WECONN3CT.App – Software made in Germany
+                </p>
+                <div class="flex items-center gap-6">
+                    <a href="#" class="text-gray-500 hover:text-gray-300 text-sm transition-colors">Impressum</a>
+                    <a href="#" class="text-gray-500 hover:text-gray-300 text-sm transition-colors">Datenschutz</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+    <script src="js/main.js"></script>
+    <!-- Premium Glass Effect für Navbar (1:1 wie Hauptseite) -->
+    <script src="js/navbar-glass-effect.js"></script>
+    <!-- Three.js für Partikel-Effekt -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="js/hero-particles.js"></script>
+
+    <!-- 3D Logo Knick-Effekt -->
+    <script>
+    (function() {
+        const container = document.querySelector('.references-bar-content');
+        const logosWrapper = document.querySelector('.logo-scroll');
+        if (!container || !logosWrapper) return;
+
+        function update3DEffect() {
+            const containerRect = container.getBoundingClientRect();
+            const containerCenter = containerRect.left + containerRect.width / 2;
+            const maxRotation = 55;
+            const logos = logosWrapper.querySelectorAll('.reference-logo');
+
+            logos.forEach(logo => {
+                const logoRect = logo.getBoundingClientRect();
+                const logoCenter = logoRect.left + logoRect.width / 2;
+                const distFromCenter = logoCenter - containerCenter;
+                const normalizedDist = distFromCenter / (containerRect.width / 2);
+
+                let rotation = 0;
+                let scale = 1;
+                let opacity = 1;
+                const absNorm = Math.abs(normalizedDist);
+
+                if (absNorm > 0.85) {
+                    const edgeFactor = (absNorm - 0.85) / 0.15;
+                    rotation = -normalizedDist * maxRotation * edgeFactor;
+                    scale = 1 - (edgeFactor * 0.25);
+                    opacity = 1 - (edgeFactor * 0.6);
+                }
+
+                logo.style.transform = `rotateY(${rotation}deg) scale(${scale})`;
+                logo.style.opacity = opacity;
+            });
+
+            requestAnimationFrame(update3DEffect);
+        }
+
+        update3DEffect();
+    })();
+    </script>
+</body>
+</html>

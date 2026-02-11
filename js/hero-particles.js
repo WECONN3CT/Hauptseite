@@ -15,7 +15,7 @@
             var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
             var pixels = imageData.data;
             var particles = [];
-            var gap = 1;
+            var gap = particleGap;
             
             for (var y = 0; y < canvas.height; y += gap) {
                 for (var x = 0; x < canvas.width; x += gap) {
@@ -52,10 +52,23 @@
             return particles;
         }
         
+        // Mobile Detection & Scaling
+        var isMobile = window.innerWidth < 768;
+        var mobileScale = isMobile ? 0.55 : 1.0;
+        var particleGap = isMobile ? 2 : 1;
+        var particleMaxSize = isMobile ? 600 : 1000;
+        var particleScale = 0.06;
+        var cameraZ = isMobile ? 65 : 100;
+        // Offsets für Logo-Zentrierung
+        var logoOffsetX = isMobile ? -35 : -64;
+        var logoOffsetY = isMobile ? 18 : 33;
+        // Icon-Zentren
+        var iconCenterX = isMobile ? 28 : 55;
+
         var img = new Image();
         img.onload = function() {
             var loadingEl = document.getElementById('loading'); if (loadingEl) loadingEl.style.display = 'none';
-            var particleData = extractParticles(img, 1000, 0.06);
+            var particleData = extractParticles(img, particleMaxSize, particleScale);
             initScene(particleData);
         };
         img.src = logoSrc;
@@ -67,11 +80,11 @@
             var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
             
             renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
             renderer.setClearColor(0x000000, 0);
             container.appendChild(renderer.domElement);
 
-            camera.position.z = 100;
+            camera.position.z = cameraZ;
             
             var totalParticles = particleData.length;
             var particleGeometry = new THREE.BufferGeometry();
@@ -90,15 +103,15 @@
             for (var i = 0; i < totalParticles; i++) {
                 var data = particleData[i];
                 
-                targetPositions[i * 3] = data.x - 64;
-                targetPositions[i * 3 + 1] = data.y + 33;
+                targetPositions[i * 3] = data.x + logoOffsetX;
+                targetPositions[i * 3 + 1] = data.y + logoOffsetY;
                 targetPositions[i * 3 + 2] = (Math.random() - 0.5) * 0.1;
                 targetColors[i * 3] = data.r;
                 targetColors[i * 3 + 1] = data.g;
                 targetColors[i * 3 + 2] = data.b;
 
-                startPositions[i * 3] = data.x - 64;
-                startPositions[i * 3 + 1] = data.y + 33;
+                startPositions[i * 3] = data.x + logoOffsetX;
+                startPositions[i * 3 + 1] = data.y + logoOffsetY;
                 startPositions[i * 3 + 2] = (Math.random() - 0.5) * 0.1;
                 startColors[i * 3] = data.r;
                 startColors[i * 3 + 1] = data.g;
@@ -164,7 +177,7 @@
             var animationPhase = 'toShape';
             var pauseTimer = 0;
             var pauseDuration = 1;
-            var globeCenterX = 55;
+            var globeCenterX = iconCenterX;
             var globeRotation = 0;
 
             function easeInOutCubic(t) {
@@ -177,7 +190,7 @@
             var sizesAttr = particleGeometry.attributes.size;
 
             function formGlobeIcon() {
-                var globeRadius = 28;
+                var globeRadius = isMobile ? 18 : 28;
 
                 for (var i = 0; i < totalParticles; i++) {
                     startPositions[i * 3] = currentPositions[i * 3];
@@ -281,7 +294,7 @@
 
             // DNA Helix Variablen
             var dnaRotation = 0;
-            var dnaCenterX = 50;
+            var dnaCenterX = iconCenterX;
 
             function formDNAHelix() {
                 // DNA Doppelhelix - EXAKT wie Referenzbild:
@@ -289,11 +302,11 @@
                 // Mitte + Oben: klassische Doppelhelix mit Querverbindungen ueber gesamte Hoehe
                 // Oben: aufbluehend in zwei Richtungen, sich aufloesend
 
-                var helixHeight = 90;      // Gesamthoehe
-                var baseRadius = 8;        // Radius unten (eng)
-                var topRadius = 22;        // Radius oben (weit aufgespreizt)
-                var turns = 2.5;           // Windungen
-                var zDepth = 22;           // Z-Tiefe - MEHR 3D
+                var helixHeight = isMobile ? 55 : 90;
+                var baseRadius = isMobile ? 5 : 8;
+                var topRadius = isMobile ? 14 : 22;
+                var turns = 2.5;
+                var zDepth = isMobile ? 14 : 22;
 
                 // Partikel-Verteilung: 38% Strang 1, 38% Strang 2, 24% Verbindungen
                 var strand1End = 0.38;
@@ -438,12 +451,13 @@
             }
 
             var cloudRotation = 0;
-            var cloudCenterX = 55;
+            var cloudCenterX = iconCenterX;
             var sphereRotation = 0;
             var sphereRotationSpeed = 0.6;
-            var sphereCenterX = 50;
+            var sphereCenterX = iconCenterX;
 
             function formCloudIcon() {
+                var cs = mobileScale; // cloud scale
                 for (var i = 0; i < totalParticles; i++) {
                     startPositions[i * 3] = currentPositions[i * 3];
                     startPositions[i * 3 + 1] = currentPositions[i * 3 + 1];
@@ -457,89 +471,77 @@
                     var x, y, isGear = false;
 
                     if (t < 0.35) {
-                        // Wolke - mehrere überlappende Kreise
                         var cloudT = t / 0.35;
                         if (cloudT < 0.3) {
-                            // Linker Kreis
                             var angle = (cloudT / 0.3) * Math.PI * 2;
-                            x = Math.cos(angle) * 12 - 10;
-                            y = Math.sin(angle) * 10 + 8;
+                            x = (Math.cos(angle) * 12 - 10) * cs;
+                            y = (Math.sin(angle) * 10 + 8) * cs;
                         } else if (cloudT < 0.6) {
-                            // Mittlerer Kreis (größer)
                             var angle = ((cloudT - 0.3) / 0.3) * Math.PI * 2;
-                            x = Math.cos(angle) * 15;
-                            y = Math.sin(angle) * 12 + 10;
+                            x = Math.cos(angle) * 15 * cs;
+                            y = (Math.sin(angle) * 12 + 10) * cs;
                         } else {
-                            // Rechter Kreis
                             var angle = ((cloudT - 0.6) / 0.4) * Math.PI * 2;
-                            x = Math.cos(angle) * 12 + 10;
-                            y = Math.sin(angle) * 10 + 8;
+                            x = (Math.cos(angle) * 12 + 10) * cs;
+                            y = (Math.sin(angle) * 10 + 8) * cs;
                         }
                     } else if (t < 0.5) {
-                        // Zahnrad in der Wolke
                         isGear = true;
                         var gearT = (t - 0.35) / 0.15;
-                        var gearRadius = 8;
+                        var gearRadius = 8 * cs;
                         var teeth = 8;
                         var angle = gearT * Math.PI * 2;
                         var toothAngle = angle * teeth;
-                        var toothOffset = (Math.sin(toothAngle) > 0 ? 2 : 0);
+                        var toothOffset = (Math.sin(toothAngle) > 0 ? 2 * cs : 0);
                         x = Math.cos(angle) * (gearRadius + toothOffset);
-                        y = Math.sin(angle) * (gearRadius + toothOffset) + 8;
+                        y = Math.sin(angle) * (gearRadius + toothOffset) + 8 * cs;
                     } else if (t < 0.65) {
-                        // Laptop (links unten)
                         var laptopT = (t - 0.5) / 0.15;
                         if (laptopT < 0.6) {
-                            // Bildschirm
                             var screenT = laptopT / 0.6;
                             if (screenT < 0.25) {
-                                x = -25 + screenT * 4 * 14;
-                                y = -18;
+                                x = (-25 + screenT * 4 * 14) * cs;
+                                y = -18 * cs;
                             } else if (screenT < 0.5) {
-                                x = -25 + 14;
-                                y = -18 + (screenT - 0.25) * 4 * 10;
+                                x = (-25 + 14) * cs;
+                                y = (-18 + (screenT - 0.25) * 4 * 10) * cs;
                             } else if (screenT < 0.75) {
-                                x = -25 + 14 - (screenT - 0.5) * 4 * 14;
-                                y = -18 + 10;
+                                x = (-25 + 14 - (screenT - 0.5) * 4 * 14) * cs;
+                                y = (-18 + 10) * cs;
                             } else {
-                                x = -25;
-                                y = -18 + 10 - (screenT - 0.75) * 4 * 10;
+                                x = -25 * cs;
+                                y = (-18 + 10 - (screenT - 0.75) * 4 * 10) * cs;
                             }
                         } else {
-                            // Tastatur
                             var keyT = (laptopT - 0.6) / 0.4;
-                            x = -28 + keyT * 20;
-                            y = -20;
+                            x = (-28 + keyT * 20) * cs;
+                            y = -20 * cs;
                         }
                     } else if (t < 0.8) {
-                        // Handy (rechts unten)
                         var phoneT = (t - 0.65) / 0.15;
                         if (phoneT < 0.25) {
-                            x = 20 + phoneT * 4 * 8;
-                            y = -22;
+                            x = (20 + phoneT * 4 * 8) * cs;
+                            y = -22 * cs;
                         } else if (phoneT < 0.5) {
-                            x = 20 + 8;
-                            y = -22 + (phoneT - 0.25) * 4 * 14;
+                            x = (20 + 8) * cs;
+                            y = (-22 + (phoneT - 0.25) * 4 * 14) * cs;
                         } else if (phoneT < 0.75) {
-                            x = 20 + 8 - (phoneT - 0.5) * 4 * 8;
-                            y = -22 + 14;
+                            x = (20 + 8 - (phoneT - 0.5) * 4 * 8) * cs;
+                            y = (-22 + 14) * cs;
                         } else {
-                            x = 20;
-                            y = -22 + 14 - (phoneT - 0.75) * 4 * 14;
+                            x = 20 * cs;
+                            y = (-22 + 14 - (phoneT - 0.75) * 4 * 14) * cs;
                         }
                     } else {
-                        // Verbindungslinien
                         var lineT = (t - 0.8) / 0.2;
                         if (lineT < 0.5) {
-                            // Linie von Laptop zur Wolke
                             var lt = lineT * 2;
-                            x = -18 + lt * 18;
-                            y = -10 + lt * 10;
+                            x = (-18 + lt * 18) * cs;
+                            y = (-10 + lt * 10) * cs;
                         } else {
-                            // Linie von Handy zur Wolke
                             var lt = (lineT - 0.5) * 2;
-                            x = 24 - lt * 24;
-                            y = -10 + lt * 10;
+                            x = (24 - lt * 24) * cs;
+                            y = (-10 + lt * 10) * cs;
                         }
                     }
 
@@ -590,11 +592,11 @@
                     var x = currentPositions[i * 3];
                     delays[i] = (1 - (x - minX) / rangeX) * 0.8;
 
-                    var radius = 25 + Math.random() * 10;
+                    var radius = (isMobile ? 16 : 25) + Math.random() * (isMobile ? 6 : 10);
                     var theta = Math.random() * Math.PI * 2;
                     var phi = Math.acos(2 * Math.random() - 1);
 
-                    targetPositions[i * 3] = radius * Math.sin(phi) * Math.cos(theta) + 50;
+                    targetPositions[i * 3] = radius * Math.sin(phi) * Math.cos(theta) + iconCenterX;
                     targetPositions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
                     targetPositions[i * 3 + 2] = radius * Math.cos(phi);
                     var colorChoice = Math.random();
@@ -650,8 +652,8 @@
                     startColors[i * 3 + 1] = currentColors[i * 3 + 1];
                     startColors[i * 3 + 2] = currentColors[i * 3 + 2];
 
-                    targetPositions[i * 3] = data.x - 64;
-                    targetPositions[i * 3 + 1] = data.y + 33;
+                    targetPositions[i * 3] = data.x + logoOffsetX;
+                    targetPositions[i * 3 + 1] = data.y + logoOffsetY;
                     targetPositions[i * 3 + 2] = (Math.random() - 0.5) * 0.1;
                     targetColors[i * 3] = data.r;
                     targetColors[i * 3 + 1] = data.g;

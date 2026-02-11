@@ -2122,6 +2122,270 @@ button:focus {
 }
 
 /* ================================
+   Mobile Optimization
+   ================================ */
+
+/* Hero Section - Mobile */
+@media (max-width: 640px) {
+    #hero-section {
+        padding-top: 5rem;
+        padding-bottom: 2rem;
+        min-height: 85vh;
+    }
+
+    /* Hero Title responsive sizing */
+    #hero-section h1 {
+        font-size: 2rem !important;
+        line-height: 1.15 !important;
+        margin-bottom: 1.25rem !important;
+    }
+
+    /* "Wir sind" text */
+    #hero-section h1 ~ p,
+    #hero-section .text-2xl {
+        font-size: 1.25rem !important;
+    }
+
+    /* Subtitle */
+    #hero-section .text-lg {
+        font-size: 0.95rem !important;
+        margin-bottom: 1.5rem !important;
+    }
+
+    /* CTA Buttons - full width stacking */
+    .btn-primary,
+    .btn-secondary {
+        padding: 14px 24px;
+        font-size: 14px;
+        width: 100%;
+        text-align: center;
+    }
+
+    /* Hero badge smaller */
+    .hero-badge {
+        padding: 6px 14px !important;
+    }
+
+    .hero-badge span:last-child {
+        font-size: 10px !important;
+    }
+
+    /* Gradient Blobs - much smaller on mobile */
+    .hero-gradient-blue {
+        width: 350px !important;
+        height: 350px !important;
+        top: -5% !important;
+        right: -15% !important;
+    }
+
+    .hero-gradient-purple {
+        width: 400px !important;
+        height: 400px !important;
+        bottom: -10% !important;
+        left: -20% !important;
+    }
+
+    /* Hero scroll wrapper */
+    .hero-scroll-wrapper {
+        min-height: 170vh;
+    }
+}
+
+@media (max-width: 480px) {
+    #hero-section h1 {
+        font-size: 1.65rem !important;
+    }
+}
+
+/* GitHub Glow Section - Mobile */
+@media (max-width: 640px) {
+    #github-glow-section {
+        padding-top: 40px;
+        padding-bottom: 30px;
+    }
+
+    .github-glow-container {
+        border-radius: 20px;
+        box-shadow:
+            0 0 40px rgba(139, 92, 246, 0.3),
+            0 0 80px rgba(99, 102, 241, 0.2),
+            0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .github-glow-inner {
+        border-radius: 18px;
+        padding: 16px 10px 40px;
+        min-height: 300px;
+    }
+
+    /* Browser Mockup - fit within container on mobile */
+    .browser-mockup {
+        width: calc(100% + 16px);
+        margin: -8px -8px -60px;
+        border-radius: 12px;
+    }
+
+    .browser-mockup-header {
+        padding: 8px 10px;
+        gap: 8px;
+    }
+
+    .browser-dot {
+        width: 8px;
+        height: 8px;
+    }
+
+    .browser-url {
+        font-size: 10px;
+    }
+
+    .browser-address-bar {
+        padding: 4px 10px;
+    }
+
+    /* Code editor panel hidden on very small screens */
+    .code-editor-panel {
+        display: none;
+    }
+
+    /* Software tab content - mobile fixes */
+    .mockup-tab-content[data-tab="software"] h3 {
+        font-size: 18px !important;
+    }
+
+    .mockup-tab-content[data-tab="software"] p {
+        font-size: 11px !important;
+        max-width: 280px !important;
+    }
+
+    /* Tab Navigation below mockup */
+    .flex.flex-col.items-center.-mt-32 {
+        margin-top: -16px !important;
+    }
+
+    .github-tabs-container {
+        max-width: 100% !important;
+        width: 92% !important;
+    }
+
+    .github-tab-content {
+        padding: 0 12px;
+    }
+
+    .github-tab-description {
+        font-size: 13px !important;
+        line-height: 1.5;
+    }
+
+    /* White overlay at bottom of glow section */
+    #github-glow-section::after {
+        height: 25%;
+    }
+}
+
+/* References / Logo Bar - Mobile */
+@media (max-width: 640px) {
+    .references-bar {
+        padding: 12px 8px 24px;
+    }
+
+    .references-bar-content {
+        padding: 10px 20px;
+        gap: 16px;
+        max-width: 95vw;
+    }
+
+    .references-bar .mt-16 {
+        margin-top: 1.5rem;
+    }
+
+    .logo-scroll {
+        gap: 32px;
+    }
+
+    .reference-logo-img {
+        height: 40px !important;
+        margin: -8px 0 !important;
+    }
+}
+
+/* Mission / About Section - Mobile */
+@media (max-width: 640px) {
+    #about {
+        padding-top: 4rem;
+        padding-bottom: 4rem;
+    }
+
+    #about h2 {
+        font-size: 1.75rem !important;
+        line-height: 1.2;
+    }
+
+    #about .text-xl {
+        font-size: 1rem;
+    }
+
+    /* Gradient orbs in about section - smaller */
+    #about > .absolute {
+        width: 200px !important;
+        height: 200px !important;
+    }
+}
+
+/* Services Section - Mobile */
+@media (max-width: 640px) {
+    #services {
+        padding-top: 4rem;
+        padding-bottom: 4rem;
+    }
+
+    #services h2 {
+        font-size: 1.75rem !important;
+    }
+}
+
+/* Case Studies Section - Mobile */
+@media (max-width: 640px) {
+    #cases {
+        padding-top: 4rem;
+        padding-bottom: 4rem;
+    }
+
+    #cases h2 {
+        font-size: 1.75rem !important;
+    }
+}
+
+/* CTA Section - Mobile */
+@media (max-width: 640px) {
+    #contact {
+        padding-top: 4rem;
+        padding-bottom: 4rem;
+    }
+
+    #contact h2 {
+        font-size: 1.75rem !important;
+        line-height: 1.2 !important;
+    }
+
+    #contact .text-xl {
+        font-size: 0.95rem;
+        margin-bottom: 2rem !important;
+    }
+}
+
+/* Footer - Mobile */
+@media (max-width: 640px) {
+    footer {
+        padding-top: 3rem;
+    }
+
+    footer .grid {
+        gap: 2rem;
+    }
+}
+
+/* ================================
    DARK MODE FIXES
    ================================ */
 

@@ -54,16 +54,16 @@
         
         // Mobile Detection & Scaling
         var isMobile = window.innerWidth < 768;
-        var mobileScale = isMobile ? 0.55 : 1.0;
+        var mobileScale = isMobile ? 0.5 : 1.0;
         var particleGap = isMobile ? 2 : 1;
-        var particleMaxSize = isMobile ? 600 : 1000;
-        var particleScale = 0.06;
-        var cameraZ = isMobile ? 65 : 100;
-        // Offsets für Logo-Zentrierung
-        var logoOffsetX = isMobile ? -35 : -64;
-        var logoOffsetY = isMobile ? 18 : 33;
-        // Icon-Zentren
-        var iconCenterX = isMobile ? 28 : 55;
+        var particleMaxSize = isMobile ? 500 : 1000;
+        var particleScale = isMobile ? 0.035 : 0.06;
+        var cameraZ = isMobile ? 55 : 100;
+        // Logo: auf Mobile oben rechts neben "Wir sind", kleiner
+        var logoOffsetX = isMobile ? -15 : -64;
+        var logoOffsetY = isMobile ? 22 : 33;
+        // Icons (Globe, DNA, Cloud, Scatter): auf Mobile unten mittig
+        var iconCenterX = isMobile ? 0 : 55;
 
         var img = new Image();
         img.onload = function() {

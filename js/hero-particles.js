@@ -60,7 +60,7 @@
         var particleScale = isMobile ? 0.035 : 0.06;
         var cameraZ = isMobile ? 55 : 100;
         // Logo: auf Mobile oben rechts neben "Wir sind", kleiner
-        var logoOffsetX = isMobile ? 5 : -64;
+        var logoOffsetX = isMobile ? 20 : -64;
         var logoOffsetY = isMobile ? 22 : 33;
         // Icons (Globe, DNA, Cloud, Scatter): auf Mobile unten mittig
         var iconCenterX = isMobile ? 0 : 55;
